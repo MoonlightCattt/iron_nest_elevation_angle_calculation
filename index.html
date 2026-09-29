@@ -86,6 +86,88 @@
             box-shadow: 0 4px 8px #00000050, 0 0 0 1px #6b778b inset;
         }
 
+        /* 弹种选择行（现在在距离之前） */
+        .ammo-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .ammo-select-wrapper {
+            flex: 1;
+            background: #13161b;
+            border-radius: 48px;
+            padding: 4px 4px 4px 20px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #2e323a;
+            transition: border-color 0.2s;
+        }
+
+        .ammo-select-wrapper:focus-within {
+            border-color: #5b6b84;
+        }
+
+        .ammo-select-wrapper label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #8d96aa;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .ammo-select-wrapper select {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 4px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #f0f3fc;
+            outline: none;
+            min-width: 0;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238d96aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 18px;
+            padding-right: 32px;
+        }
+
+        .ammo-select-wrapper select option {
+            background: #1e2229;
+            color: #e6e8ee;
+            padding: 8px;
+        }
+
+        .ammo-clear-btn {
+            background: #282e38;
+            border: none;
+            border-radius: 40px;
+            width: 56px;
+            height: 56px;
+            font-size: 1.2rem;
+            color: #cdd6e6;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: background 0.1s, transform 0.1s;
+            margin-left: 4px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px #00000040;
+        }
+
+        .ammo-clear-btn:active {
+            background: #3b4351;
+            transform: scale(0.94);
+        }
+
+        /* 距离输入区 */
         .input-block {
             background: #13161b;
             border-radius: 48px;
@@ -154,26 +236,36 @@
             transform: scale(0.94);
         }
 
-        .result-card {
-            background: #1b1f27;
-            border-radius: 28px;
-            padding: 16px 20px;
-            margin-bottom: 18px;
-            border: 1px solid #343b46;
+        /* 装药 & 仰角 双卡片区（装药在左，仰角在右） */
+        .stats-row {
             display: flex;
-            align-items: baseline;
-            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: #1b1f27;
+            border-radius: 24px;
+            padding: 14px 16px;
+            border: 1px solid #343b46;
             box-shadow: 0 6px 0 #0b0d10;
+            flex: 1;
+            min-width: 0;
         }
 
-        .result-label {
-            font-size: 1.1rem;
-            font-weight: 400;
+        .stat-label {
+            font-size: 0.85rem;
+            font-weight: 500;
             color: #8b95a8;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        .result-value {
-            font-size: 2.2rem;
+        .stat-value {
+            font-size: 2rem;
             font-weight: 700;
             color: #e7edff;
             line-height: 1.2;
@@ -182,13 +274,49 @@
             display: flex;
             align-items: baseline;
             gap: 4px;
+            white-space: nowrap;
         }
 
-        .result-value small {
-            font-size: 1rem;
+        .stat-value small {
+            font-size: 0.9rem;
             font-weight: 400;
             color: #7f8b9f;
+            margin-left: 2px;
+        }
+
+        /* 装药卡片高亮强调 */
+        .charge-card {
+            background: #1f2a1f;
+            border: 1px solid #3e6b3e;
+            box-shadow: 0 6px 0 #0a130a;
+            position: relative;
+        }
+
+        .charge-card .stat-label {
+            color: #9fdf9f;
+        }
+
+        .charge-card .stat-value {
+            color: #d4ffd4;
+            text-shadow: 0 0 12px #4a8f4a80;
+        }
+
+        .charge-card .stat-value small {
+            color: #7db87d;
+        }
+
+        .charge-card .charge-number {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #e8ffe8;
+            line-height: 1;
+            letter-spacing: 1px;
+            background: #2d4a2d;
+            padding: 2px 12px;
+            border-radius: 40px;
+            display: inline-block;
             margin-left: 4px;
+            box-shadow: 0 2px 0 #1a2e1a inset, 0 0 18px #5a9f5a30;
         }
 
         .detail-line {
@@ -282,13 +410,14 @@
         .record-left {
             display: flex;
             align-items: baseline;
-            gap: 12px;
+            gap: 10px;
             flex: 1;
             min-width: 0;
+            flex-wrap: wrap;
         }
 
         .record-index {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             color: #6f7a8f;
             background: #1f242e;
@@ -298,7 +427,7 @@
         }
 
         .record-angle {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 700;
             color: #dbe4ff;
             font-variant-numeric: tabular-nums;
@@ -306,10 +435,34 @@
         }
 
         .record-angle small {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 400;
             color: #7e8aa0;
-            margin-left: 2px;
+            margin-left: 1px;
+        }
+
+        .record-charge-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #b6f0b6;
+            background: #1e361e;
+            padding: 3px 12px;
+            border-radius: 40px;
+            border: 1px solid #3e6b3e;
+            white-space: nowrap;
+            box-shadow: 0 0 10px #3e6b3e40;
+        }
+
+        .record-ammo-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #f0d6a6;
+            background: #3a2e1a;
+            padding: 3px 12px;
+            border-radius: 40px;
+            border: 1px solid #6b5a3e;
+            white-space: nowrap;
+            box-shadow: 0 0 10px #6b5a3e40;
         }
 
         .record-actions {
@@ -323,8 +476,8 @@
             background: #232a35;
             border: none;
             border-radius: 30px;
-            padding: 8px 14px;
-            font-size: 0.85rem;
+            padding: 8px 12px;
+            font-size: 0.8rem;
             font-weight: 600;
             color: #b7c1d6;
             cursor: pointer;
@@ -390,6 +543,38 @@
             background: #3d4553;
             border-radius: 10px;
         }
+
+        /* 手机小屏微调 */
+        @media (max-width: 380px) {
+            .stat-value {
+                font-size: 1.7rem;
+            }
+            .charge-card .charge-number {
+                font-size: 2rem;
+                padding: 1px 8px;
+            }
+            .record-angle {
+                font-size: 1.15rem;
+            }
+            .record-btn {
+                padding: 6px 8px;
+                font-size: 0.7rem;
+            }
+            .record-index {
+                font-size: 0.75rem;
+                padding: 3px 8px;
+            }
+            .ammo-select-wrapper {
+                padding-left: 14px;
+            }
+            .ammo-select-wrapper label {
+                font-size: 0.85rem;
+                margin-right: 4px;
+            }
+            .ammo-select-wrapper select {
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -406,17 +591,57 @@
             <button class="mode-btn" data-mode="emergency">急射</button>
         </div>
 
-        <!-- 输入区 -->
+        <!-- 弹种选择区（已移到距离前面） -->
+        <div class="ammo-row">
+            <div class="ammo-select-wrapper">
+                <label>弹种</label>
+                <select id="ammoSelect">
+                    <option value="">— 无 —</option>
+                    <option value="照明弹">照明弹</option>
+                    <option value="高爆弹">高爆弹</option>
+                    <option value="高装药高爆弹">高装药高爆弹</option>
+                    <option value="轻型高爆弹">轻型高爆弹</option>
+                    <option value="穿甲弹">穿甲弹</option>
+                    <option value="穿甲高爆弹">穿甲高爆弹</option>
+                    <option value="钻地弹">钻地弹</option>
+                    <option value="燃烧弹">燃烧弹</option>
+                    <option value="高温燃烧弹">高温燃烧弹</option>
+                    <option value="烟雾弹">烟雾弹</option>
+                    <option value="训练弹">训练弹</option>
+                    <option value="催泪弹">催泪弹</option>
+                    <option value="光气弹">光气弹</option>
+                    <option value="芥气弹">芥气弹</option>
+                    <option value="氰气弹">氰气弹</option>
+                    <option value="白磷弹">白磷弹</option>
+                    <option value="霰弹">霰弹</option>
+                    <option value="延时集束弹">延时集束弹</option>
+                    <option value="集束子母弹">集束子母弹</option>
+                    <option value="宣传弹">宣传弹</option>
+                    <option value="战术核炮弹">战术核炮弹</option>
+                </select>
+            </div>
+            <button class="ammo-clear-btn" id="ammoClearBtn" aria-label="清除弹种">✕</button>
+        </div>
+
+        <!-- 距离输入区 -->
         <div class="input-block">
             <label>距离</label>
             <input type="text" id="distanceInput" inputmode="decimal" placeholder="公里" value="">
-            <button class="clear-btn" id="clearBtn" aria-label="清除输入">✕</button>
+            <button class="clear-btn" id="clearBtn" aria-label="清除距离">✕</button>
         </div>
 
-        <!-- 实时结果显示 -->
-        <div class="result-card">
-            <span class="result-label">仰角</span>
-            <div class="result-value" id="angleDisplay">0.00<small>°</small></div>
+        <!-- 装药 & 仰角 双卡片（装药在左，仰角在右） -->
+        <div class="stats-row">
+            <div class="stat-card charge-card">
+                <div class="stat-label">💥 装药</div>
+                <div class="stat-value">
+                    <span class="charge-number" id="chargeNumber">—</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">📐 仰角</div>
+                <div class="stat-value" id="angleDisplay">0.00<small>°</small></div>
+            </div>
         </div>
         <div class="detail-line" id="chargeDetail">等待输入…</div>
 
@@ -440,21 +665,25 @@
     <script>
         (function() {
             // ---------- 持久化存储键名 ----------
-            const STORAGE_KEY = 'ironNest_records_v1';
-            const STORAGE_SEQ_KEY = 'ironNest_seq_v1';
+            const STORAGE_KEY = 'ironNest_records_v6';   // 版本升级：弹种顺序调整
+            const STORAGE_SEQ_KEY = 'ironNest_seq_v6';
 
             // ---------- 状态 ----------
             let currentMode = 'economy';        // economy / rapid / emergency
             let currentDistance = null;         // 有效数字(公里)
             let currentAngle = null;            // 仰角数值(°)
             let currentCharge = null;           // 装药数
+            let currentAmmo = '';               // 弹种名称
             let recordSeq = 0;                  // 用于序号自增
-            let records = [];                   // 存放记录对象: { id, angle, done }
+            let records = [];                   // 记录对象: { id, angle, charge, ammo, done }
 
             // DOM 元素
             const distanceInput = document.getElementById('distanceInput');
             const clearBtn = document.getElementById('clearBtn');
+            const ammoSelect = document.getElementById('ammoSelect');
+            const ammoClearBtn = document.getElementById('ammoClearBtn');
             const angleDisplay = document.getElementById('angleDisplay');
+            const chargeNumber = document.getElementById('chargeNumber');
             const chargeDetail = document.getElementById('chargeDetail');
             const addRecordBtn = document.getElementById('addRecordBtn');
             const recordList = document.getElementById('recordList');
@@ -477,11 +706,12 @@
                     const storedSeq = localStorage.getItem(STORAGE_SEQ_KEY);
                     if (storedRecords) {
                         records = JSON.parse(storedRecords);
-                        // 确保每条记录都有done字段（兼容旧数据）
                         records = records.map(r => ({
                             id: r.id,
                             angle: r.angle,
-                            done: r.done === true  // 确保布尔值
+                            charge: r.charge !== undefined ? r.charge : 1,
+                            ammo: r.ammo || '',
+                            done: r.done === true
                         }));
                     } else {
                         records = [];
@@ -489,14 +719,12 @@
                     if (storedSeq) {
                         recordSeq = parseInt(storedSeq, 10) || 0;
                     } else {
-                        // 如果seq没有存储但记录存在，从记录中推断最大id
                         if (records.length > 0) {
                             recordSeq = Math.max(...records.map(r => r.id), 0);
                         } else {
                             recordSeq = 0;
                         }
                     }
-                    // 如果recordSeq小于记录最大id，修正
                     if (records.length > 0) {
                         const maxId = Math.max(...records.map(r => r.id));
                         if (recordSeq < maxId) recordSeq = maxId;
@@ -509,7 +737,6 @@
             }
 
             // ---------- 工具函数 ----------
-            // 根据模式和距离返回装药数 (无效距离返回 null)
             function getCharge(mode, distance) {
                 if (distance === null || isNaN(distance) || distance <= 0) return null;
 
@@ -539,33 +766,28 @@
                 }
             }
 
-            // 计算仰角 (原始公式)，限制不超过60°，保留两位小数
             function computeAngle(charge, distance) {
                 if (charge === null || distance === null || distance <= 0) return null;
                 let raw = (12 / charge) * distance;
                 let limited = Math.min(raw, 60);
-                return Math.round(limited * 100) / 100;  // 两位小数
+                return Math.round(limited * 100) / 100;
             }
 
-            // 格式化角度显示
             function formatAngle(angle) {
                 if (angle === null) return '0.00';
                 return angle.toFixed(2);
             }
 
-            // 更新UI(仰角、装药、按钮状态)
             function refreshCalculation() {
-                // 解析输入距离
                 const rawInput = distanceInput.value.trim();
                 let distance = null;
                 if (rawInput !== '') {
                     distance = parseFloat(rawInput);
                     if (isNaN(distance) || distance <= 0) {
-                        distance = null;   // 无效输入: 0, 负数, 非数字
+                        distance = null;
                     }
                 }
 
-                // 根据当前模式获取装药
                 const charge = getCharge(currentMode, distance);
                 let angle = null;
 
@@ -573,10 +795,17 @@
                     angle = computeAngle(charge, distance);
                 }
 
-                // 更新显示
                 angleDisplay.innerHTML = `${formatAngle(angle)}<small>°</small>`;
+
+                if (charge !== null) {
+                    chargeNumber.textContent = charge;
+                } else {
+                    chargeNumber.textContent = '—';
+                }
+
+                const ammoText = currentAmmo ? ` · ${currentAmmo}` : '';
                 if (distance !== null && charge !== null && angle !== null) {
-                    chargeDetail.textContent = `装药 ${charge}  ·  距离 ${distance.toFixed(2)} km`;
+                    chargeDetail.textContent = `距离 ${distance.toFixed(2)} km  ·  装药 ${charge}${ammoText}`;
                 } else if (rawInput === '') {
                     chargeDetail.textContent = '输入距离计算';
                 } else if (distance === null) {
@@ -585,17 +814,14 @@
                     chargeDetail.textContent = '超出该模式射程';
                 }
 
-                // 更新按钮可用状态
                 const valid = (distance !== null && charge !== null && angle !== null);
                 addRecordBtn.disabled = !valid;
 
-                // 保存当前计算值供添加记录用
                 currentDistance = distance;
                 currentCharge = charge;
                 currentAngle = angle;
             }
 
-            // 渲染记录列表
             function renderRecords() {
                 if (records.length === 0) {
                     recordList.innerHTML = '<li class="empty-records">暂无记录</li>';
@@ -608,15 +834,21 @@
                     const angleStr = rec.angle.toFixed(2);
                     const isDone = rec.done === true;
                     const itemClass = isDone ? 'record-item done-item' : 'record-item';
-                    // 已完成按钮：如果done为true，显示为“✓ 已完成”并禁用
+                    const chargeValue = rec.charge !== undefined ? rec.charge : '?';
+                    const ammoValue = rec.ammo || '';
                     const doneBtnHtml = isDone
                         ? `<button class="record-btn done" data-action="done" data-id="${rec.id}" disabled>✓ 已完成</button>`
-                        : `<button class="record-btn done" data-action="done" data-id="${rec.id}">已完成</button>`;
+                        : `<button class="record-btn done" data-action="done" data-id="${rec.id}">完成</button>`;
+
+                    // 弹种徽章放在装药前面
+                    const ammoBadgeHtml = ammoValue ? `<span class="record-ammo-badge">${ammoValue}</span>` : '';
 
                     html += `
                         <li class="${itemClass}" data-id="${rec.id}">
                             <div class="record-left">
                                 <span class="record-index">#${rec.id}</span>
+                                ${ammoBadgeHtml}
+                                <span class="record-charge-badge">装药 ${chargeValue}</span>
                                 <span class="record-angle">${angleStr}<small>°</small></span>
                             </div>
                             <div class="record-actions">
@@ -630,50 +862,53 @@
                 recordCount.textContent = `${records.length} 条`;
             }
 
-            // 添加记录
             function addRecord() {
                 if (currentAngle === null || currentDistance === null || currentCharge === null) {
-                    return; // 不可用，但按钮已禁用
+                    return;
                 }
                 recordSeq += 1;
                 const newRecord = {
                     id: recordSeq,
                     angle: currentAngle,
+                    charge: currentCharge,
+                    ammo: currentAmmo,
                     done: false
                 };
                 records.push(newRecord);
-                saveRecords();       // 持久化
+                saveRecords();
                 renderRecords();
             }
 
-            // 删除记录
             function deleteRecord(id) {
                 const index = records.findIndex(r => r.id === id);
                 if (index !== -1) {
                     records.splice(index, 1);
-                    saveRecords();   // 持久化
+                    saveRecords();
                     renderRecords();
                 }
             }
 
-            // 标记已完成（持久化）
             function markDone(id) {
                 const record = records.find(r => r.id === id);
                 if (record && !record.done) {
                     record.done = true;
-                    saveRecords();   // 持久化
+                    saveRecords();
                     renderRecords();
                 }
             }
 
-            // 重置所有状态，清除输入并聚焦
             function clearInputAndFocus() {
                 distanceInput.value = '';
                 refreshCalculation();
                 distanceInput.focus();
             }
 
-            // 切换模式
+            function clearAmmo() {
+                ammoSelect.value = '';
+                currentAmmo = '';
+                refreshCalculation();
+            }
+
             function setMode(mode) {
                 currentMode = mode;
                 modeBtns.forEach(btn => {
@@ -684,13 +919,23 @@
             }
 
             // ---------- 事件绑定 ----------
-            distanceInput.addEventListener('input', function(e) {
+            distanceInput.addEventListener('input', function() {
                 refreshCalculation();
             });
 
             clearBtn.addEventListener('click', function(e) {
                 e.preventDefault();
                 clearInputAndFocus();
+            });
+
+            ammoSelect.addEventListener('change', function() {
+                currentAmmo = this.value;
+                refreshCalculation();
+            });
+
+            ammoClearBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                clearAmmo();
             });
 
             modeBtns.forEach(btn => {
@@ -704,7 +949,6 @@
                 addRecord();
             });
 
-            // 记录列表事件委托
             recordList.addEventListener('click', function(e) {
                 const target = e.target.closest('.record-btn');
                 if (!target) return;
@@ -715,7 +959,6 @@
                 if (action === 'delete') {
                     deleteRecord(id);
                 } else if (action === 'done') {
-                    // 如果按钮已被禁用则忽略（防御）
                     if (!target.disabled) {
                         markDone(id);
                     }
@@ -724,23 +967,18 @@
 
             // ---------- 初始化 ----------
             function init() {
-                // 1. 加载持久化记录
                 loadRecords();
-
-                // 2. 设置默认模式
                 setMode('economy');
-
-                // 3. 清空输入并计算状态
                 distanceInput.value = '';
+                ammoSelect.value = '';
+                currentAmmo = '';
                 refreshCalculation();
-
-                // 4. 渲染记录列表
                 renderRecords();
             }
 
             init();
 
-            // 额外：监听 storage 事件，多标签页同步（可选）
+            // 多标签同步
             window.addEventListener('storage', function(e) {
                 if (e.key === STORAGE_KEY || e.key === STORAGE_SEQ_KEY) {
                     loadRecords();
