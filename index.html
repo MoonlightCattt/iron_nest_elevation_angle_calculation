@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>铁巢重炮 · 射击诸元计算器</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        body {
+            background: #1e1f22;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 12px 8px 24px;
+        }
+
+        .app {
+            max-width: 480px;
+            width: 100%;
+            background: #0b0c0e;
+            border-radius: 28px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.8), 0 0 0 1px #3a3c42 inset;
+            padding: 20px 16px 24px;
+            color: #e6e8ee;
+        }
+
+        h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-align: center;
+            color: #c0c6d4;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 4px #00000080;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        h1 span {
+            background: #2a2e36;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #9aa2b3;
+        }
+
+        .mode-switch {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            background: #13161b;
+            padding: 6px;
+            border-radius: 44px;
+            border: 1px solid #2e323a;
+        }
+
+        .mode-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            border-radius: 36px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #9aa2b3;
+            background: transparent;
+            border: none;
+            transition: all 0.15s ease;
+            cursor: pointer;
+            touch-action: manipulation;
+            letter-spacing: 0.5px;
+        }
+
+        .mode-btn.active {
+            background: #3f4754;
+            color: #f0f3fc;
+            box-shadow: 0 4px 8px #00000050, 0 0 0 1px #6b778b inset;
+        }
+
+        .input-block {
+            background: #13161b;
+            border-radius: 48px;
+            padding: 4px 4px 4px 20px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #2e323a;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .input-block:focus-within {
+            border-color: #5b6b84;
+        }
+
+        .input-block label {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #8d96aa;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .input-block input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 14px 4px;
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: #f0f3fc;
+            outline: none;
+            min-width: 0;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 0.5px;
+        }
+
+        .input-block input::placeholder {
+            color: #4a5262;
+            font-weight: 400;
+            font-size: 1rem;
+        }
+
+        .clear-btn {
+            background: #282e38;
+            border: none;
+            border-radius: 40px;
+            width: 56px;
+            height: 56px;
+            font-size: 1.6rem;
+            color: #cdd6e6;
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: background 0.1s, transform 0.1s;
+            margin-left: 4px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px #00000040;
+        }
+
+        .clear-btn:active {
+            background: #3b4351;
+            transform: scale(0.94);
+        }
+
+        .result-card {
+            background: #1b1f27;
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin-bottom: 18px;
+            border: 1px solid #343b46;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            box-shadow: 0 6px 0 #0b0d10;
+        }
+
+        .result-label {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: #8b95a8;
+        }
+
+        .result-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #e7edff;
+            line-height: 1.2;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+        }
+
+        .result-value small {
+            font-size: 1rem;
+            font-weight: 400;
+            color: #7f8b9f;
+            margin-left: 4px;
+        }
+
+        .detail-line {
+            font-size: 0.9rem;
+            color: #7a849b;
+            text-align: right;
+            margin-top: -8px;
+            margin-bottom: 14px;
+            padding-right: 6px;
+            min-height: 1.2em;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .add-btn {
+            flex: 1;
+            background: #2d3440;
+            border: none;
+            border-radius: 60px;
+            padding: 16px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ebf0ff;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: background 0.1s, transform 0.1s;
+            box-shadow: 0 4px 0 #0e1013;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.8px;
+            border: 1px solid #4b5568;
+        }
+
+        .add-btn:active {
+            background: #3b4453;
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #0e1013;
+        }
+
+        .add-btn:disabled {
+            opacity: 0.45;
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #0e1013;
+            pointer-events: none;
+        }
+
+        .records-title {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #7c869d;
+            margin-bottom: 10px;
+            padding-left: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .record-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 2px;
+        }
+
+        .record-item {
+            background: #13171f;
+            border-radius: 20px;
+            padding: 12px 12px 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #2f353f;
+            box-shadow: 0 2px 0 #0a0c0f;
+            transition: background 0.1s, opacity 0.2s;
+        }
+
+        .record-item.done-item {
+            background: #101a10;
+            border-color: #2f4a2f;
+            opacity: 0.85;
+        }
+
+        .record-left {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .record-index {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #6f7a8f;
+            background: #1f242e;
+            padding: 4px 10px;
+            border-radius: 40px;
+            flex-shrink: 0;
+        }
+
+        .record-angle {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #dbe4ff;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .record-angle small {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: #7e8aa0;
+            margin-left: 2px;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .record-btn {
+            background: #232a35;
+            border: none;
+            border-radius: 30px;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #b7c1d6;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: all 0.1s;
+            border: 1px solid #3d4553;
+            white-space: nowrap;
+            box-shadow: 0 2px 0 #0b0d10;
+        }
+
+        .record-btn.done {
+            color: #a7e0a7;
+            border-color: #3e6b3e;
+            background: #1c2b1c;
+        }
+
+        .record-btn.done:active {
+            background: #2c3f2c;
+        }
+
+        .record-btn.delete {
+            color: #f9b2b2;
+            border-color: #7a3e3e;
+            background: #2b1c1c;
+        }
+
+        .record-btn.delete:active {
+            background: #3f2c2c;
+        }
+
+        .record-btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 0 #0b0d10;
+        }
+
+        .record-btn:disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            transform: none;
+            box-shadow: 0 1px 0 #0b0d10;
+        }
+
+        .empty-records {
+            color: #424b5c;
+            font-size: 0.95rem;
+            text-align: center;
+            padding: 24px 0 16px;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+
+        /* 滚动条美化 */
+        .record-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .record-list::-webkit-scrollbar-track {
+            background: #1b1f27;
+            border-radius: 10px;
+        }
+
+        .record-list::-webkit-scrollbar-thumb {
+            background: #3d4553;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <h1>
+            🎯 铁巢重炮
+            <span>诸元</span>
+        </h1>
+
+        <!-- 模式切换 -->
+        <div class="mode-switch">
+            <button class="mode-btn active" data-mode="economy">节约射</button>
+            <button class="mode-btn" data-mode="rapid">速射</button>
+            <button class="mode-btn" data-mode="emergency">急射</button>
+        </div>
+
+        <!-- 输入区 -->
+        <div class="input-block">
+            <label>距离</label>
+            <input type="text" id="distanceInput" inputmode="decimal" placeholder="公里" value="">
+            <button class="clear-btn" id="clearBtn" aria-label="清除输入">✕</button>
+        </div>
+
+        <!-- 实时结果显示 -->
+        <div class="result-card">
+            <span class="result-label">仰角</span>
+            <div class="result-value" id="angleDisplay">0.00<small>°</small></div>
+        </div>
+        <div class="detail-line" id="chargeDetail">等待输入…</div>
+
+        <!-- 添加记录按钮 -->
+        <div class="action-row">
+            <button class="add-btn" id="addRecordBtn" disabled>
+                <span>📋</span> 添加记录
+            </button>
+        </div>
+
+        <!-- 记录列表 -->
+        <div class="records-title">
+            <span>射击记录</span>
+            <span id="recordCount">0 条</span>
+        </div>
+        <ul class="record-list" id="recordList">
+            <li class="empty-records">暂无记录</li>
+        </ul>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- 持久化存储键名 ----------
+            const STORAGE_KEY = 'ironNest_records_v1';
+            const STORAGE_SEQ_KEY = 'ironNest_seq_v1';
+
+            // ---------- 状态 ----------
+            let currentMode = 'economy';        // economy / rapid / emergency
+            let currentDistance = null;         // 有效数字(公里)
+            let currentAngle = null;            // 仰角数值(°)
+            let currentCharge = null;           // 装药数
+            let recordSeq = 0;                  // 用于序号自增
+            let records = [];                   // 存放记录对象: { id, angle, done }
+
+            // DOM 元素
+            const distanceInput = document.getElementById('distanceInput');
+            const clearBtn = document.getElementById('clearBtn');
+            const angleDisplay = document.getElementById('angleDisplay');
+            const chargeDetail = document.getElementById('chargeDetail');
+            const addRecordBtn = document.getElementById('addRecordBtn');
+            const recordList = document.getElementById('recordList');
+            const recordCount = document.getElementById('recordCount');
+            const modeBtns = document.querySelectorAll('.mode-btn');
+
+            // ---------- 持久化函数 ----------
+            function saveRecords() {
+                try {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+                    localStorage.setItem(STORAGE_SEQ_KEY, recordSeq.toString());
+                } catch (e) {
+                    console.warn('保存记录失败', e);
+                }
+            }
+
+            function loadRecords() {
+                try {
+                    const storedRecords = localStorage.getItem(STORAGE_KEY);
+                    const storedSeq = localStorage.getItem(STORAGE_SEQ_KEY);
+                    if (storedRecords) {
+                        records = JSON.parse(storedRecords);
+                        // 确保每条记录都有done字段（兼容旧数据）
+                        records = records.map(r => ({
+                            id: r.id,
+                            angle: r.angle,
+                            done: r.done === true  // 确保布尔值
+                        }));
+                    } else {
+                        records = [];
+                    }
+                    if (storedSeq) {
+                        recordSeq = parseInt(storedSeq, 10) || 0;
+                    } else {
+                        // 如果seq没有存储但记录存在，从记录中推断最大id
+                        if (records.length > 0) {
+                            recordSeq = Math.max(...records.map(r => r.id), 0);
+                        } else {
+                            recordSeq = 0;
+                        }
+                    }
+                    // 如果recordSeq小于记录最大id，修正
+                    if (records.length > 0) {
+                        const maxId = Math.max(...records.map(r => r.id));
+                        if (recordSeq < maxId) recordSeq = maxId;
+                    }
+                } catch (e) {
+                    console.warn('读取记录失败，重置', e);
+                    records = [];
+                    recordSeq = 0;
+                }
+            }
+
+            // ---------- 工具函数 ----------
+            // 根据模式和距离返回装药数 (无效距离返回 null)
+            function getCharge(mode, distance) {
+                if (distance === null || isNaN(distance) || distance <= 0) return null;
+
+                switch (mode) {
+                    case 'economy':
+                        if (distance > 0 && distance <= 5) return 1;
+                        if (distance > 5 && distance <= 10) return 2;
+                        if (distance > 10 && distance <= 15) return 3;
+                        if (distance > 15 && distance <= 20) return 4;
+                        if (distance > 20 && distance <= 25) return 5;
+                        if (distance > 25 && distance <= 30) return 6;
+                        return null;
+                    case 'rapid':
+                        if (distance > 0 && distance <= 0.5) return 1;
+                        if (distance > 0.5 && distance <= 1.25) return 2;
+                        if (distance > 1.25 && distance <= 2.5) return 3;
+                        if (distance > 2.5 && distance <= 5) return 4;
+                        if (distance > 5 && distance <= 12.5) return 5;
+                        if (distance > 12.5 && distance <= 30) return 6;
+                        return null;
+                    case 'emergency':
+                        if (distance > 0 && distance <= 2.5) return 3;
+                        if (distance > 2.5 && distance <= 30) return 6;
+                        return null;
+                    default:
+                        return null;
+                }
+            }
+
+            // 计算仰角 (原始公式)，限制不超过60°，保留两位小数
+            function computeAngle(charge, distance) {
+                if (charge === null || distance === null || distance <= 0) return null;
+                let raw = (12 / charge) * distance;
+                let limited = Math.min(raw, 60);
+                return Math.round(limited * 100) / 100;  // 两位小数
+            }
+
+            // 格式化角度显示
+            function formatAngle(angle) {
+                if (angle === null) return '0.00';
+                return angle.toFixed(2);
+            }
+
+            // 更新UI(仰角、装药、按钮状态)
+            function refreshCalculation() {
+                // 解析输入距离
+                const rawInput = distanceInput.value.trim();
+                let distance = null;
+                if (rawInput !== '') {
+                    distance = parseFloat(rawInput);
+                    if (isNaN(distance) || distance <= 0) {
+                        distance = null;   // 无效输入: 0, 负数, 非数字
+                    }
+                }
+
+                // 根据当前模式获取装药
+                const charge = getCharge(currentMode, distance);
+                let angle = null;
+
+                if (distance !== null && charge !== null) {
+                    angle = computeAngle(charge, distance);
+                }
+
+                // 更新显示
+                angleDisplay.innerHTML = `${formatAngle(angle)}<small>°</small>`;
+                if (distance !== null && charge !== null && angle !== null) {
+                    chargeDetail.textContent = `装药 ${charge}  ·  距离 ${distance.toFixed(2)} km`;
+                } else if (rawInput === '') {
+                    chargeDetail.textContent = '输入距离计算';
+                } else if (distance === null) {
+                    chargeDetail.textContent = '距离无效 (需 >0)';
+                } else {
+                    chargeDetail.textContent = '超出该模式射程';
+                }
+
+                // 更新按钮可用状态
+                const valid = (distance !== null && charge !== null && angle !== null);
+                addRecordBtn.disabled = !valid;
+
+                // 保存当前计算值供添加记录用
+                currentDistance = distance;
+                currentCharge = charge;
+                currentAngle = angle;
+            }
+
+            // 渲染记录列表
+            function renderRecords() {
+                if (records.length === 0) {
+                    recordList.innerHTML = '<li class="empty-records">暂无记录</li>';
+                    recordCount.textContent = '0 条';
+                    return;
+                }
+
+                let html = '';
+                records.forEach(rec => {
+                    const angleStr = rec.angle.toFixed(2);
+                    const isDone = rec.done === true;
+                    const itemClass = isDone ? 'record-item done-item' : 'record-item';
+                    // 已完成按钮：如果done为true，显示为“✓ 已完成”并禁用
+                    const doneBtnHtml = isDone
+                        ? `<button class="record-btn done" data-action="done" data-id="${rec.id}" disabled>✓ 已完成</button>`
+                        : `<button class="record-btn done" data-action="done" data-id="${rec.id}">已完成</button>`;
+
+                    html += `
+                        <li class="${itemClass}" data-id="${rec.id}">
+                            <div class="record-left">
+                                <span class="record-index">#${rec.id}</span>
+                                <span class="record-angle">${angleStr}<small>°</small></span>
+                            </div>
+                            <div class="record-actions">
+                                ${doneBtnHtml}
+                                <button class="record-btn delete" data-action="delete" data-id="${rec.id}">删除</button>
+                            </div>
+                        </li>
+                    `;
+                });
+                recordList.innerHTML = html;
+                recordCount.textContent = `${records.length} 条`;
+            }
+
+            // 添加记录
+            function addRecord() {
+                if (currentAngle === null || currentDistance === null || currentCharge === null) {
+                    return; // 不可用，但按钮已禁用
+                }
+                recordSeq += 1;
+                const newRecord = {
+                    id: recordSeq,
+                    angle: currentAngle,
+                    done: false
+                };
+                records.push(newRecord);
+                saveRecords();       // 持久化
+                renderRecords();
+            }
+
+            // 删除记录
+            function deleteRecord(id) {
+                const index = records.findIndex(r => r.id === id);
+                if (index !== -1) {
+                    records.splice(index, 1);
+                    saveRecords();   // 持久化
+                    renderRecords();
+                }
+            }
+
+            // 标记已完成（持久化）
+            function markDone(id) {
+                const record = records.find(r => r.id === id);
+                if (record && !record.done) {
+                    record.done = true;
+                    saveRecords();   // 持久化
+                    renderRecords();
+                }
+            }
+
+            // 重置所有状态，清除输入并聚焦
+            function clearInputAndFocus() {
+                distanceInput.value = '';
+                refreshCalculation();
+                distanceInput.focus();
+            }
+
+            // 切换模式
+            function setMode(mode) {
+                currentMode = mode;
+                modeBtns.forEach(btn => {
+                    const m = btn.dataset.mode;
+                    btn.classList.toggle('active', m === mode);
+                });
+                refreshCalculation();
+            }
+
+            // ---------- 事件绑定 ----------
+            distanceInput.addEventListener('input', function(e) {
+                refreshCalculation();
+            });
+
+            clearBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                clearInputAndFocus();
+            });
+
+            modeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const mode = this.dataset.mode;
+                    if (mode) setMode(mode);
+                });
+            });
+
+            addRecordBtn.addEventListener('click', function() {
+                addRecord();
+            });
+
+            // 记录列表事件委托
+            recordList.addEventListener('click', function(e) {
+                const target = e.target.closest('.record-btn');
+                if (!target) return;
+                const action = target.dataset.action;
+                const id = parseInt(target.dataset.id, 10);
+                if (isNaN(id)) return;
+
+                if (action === 'delete') {
+                    deleteRecord(id);
+                } else if (action === 'done') {
+                    // 如果按钮已被禁用则忽略（防御）
+                    if (!target.disabled) {
+                        markDone(id);
+                    }
+                }
+            });
+
+            // ---------- 初始化 ----------
+            function init() {
+                // 1. 加载持久化记录
+                loadRecords();
+
+                // 2. 设置默认模式
+                setMode('economy');
+
+                // 3. 清空输入并计算状态
+                distanceInput.value = '';
+                refreshCalculation();
+
+                // 4. 渲染记录列表
+                renderRecords();
+            }
+
+            init();
+
+            // 额外：监听 storage 事件，多标签页同步（可选）
+            window.addEventListener('storage', function(e) {
+                if (e.key === STORAGE_KEY || e.key === STORAGE_SEQ_KEY) {
+                    loadRecords();
+                    renderRecords();
+                }
+            });
+
+        })();
+    </script>
+</body>
+</html>
